@@ -7,23 +7,25 @@ extern struct commit_list *find_bisection(struct commit_list *list,
 
 extern struct commit_list *filter_skipped(struct commit_list *list,
 					  struct commit_list **tried,
-					  int show_all);
+					  int show_all,
+					  int *count,
+					  int *skipped_first);
 
-/* bisect_show_flags flags in struct rev_list_info */
 #define BISECT_SHOW_ALL		(1<<0)
-#define BISECT_SHOW_TRIED	(1<<1)
-#define BISECT_SHOW_STRINGED	(1<<2)
+#define REV_LIST_QUIET		(1<<1)
 
 struct rev_list_info {
 	struct rev_info *revs;
-	int bisect_show_flags;
+	int flags;
 	int show_timestamp;
 	int hdr_termination;
 	const char *header_prefix;
 };
 
-extern int show_bisect_vars(struct rev_list_info *info, int reaches, int all);
+extern int bisect_next_all(const char *prefix, int no_checkout);
 
-extern int bisect_next_vars(const char *prefix);
+extern int estimate_bisect_steps(int all);
+
+extern void read_bisect_terms(const char **bad, const char **good);
 
 #endif
